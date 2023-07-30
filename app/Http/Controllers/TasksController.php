@@ -23,13 +23,13 @@ class TasksController extends Controller
         Log::info('reuest data '.json_encode($request_data));
         $data = $request_data;
         Log::info('data '.json_encode($data));
-        $project = Project::select('projectname')->where('id',$id)->pluck('projectname');
+        $project = Project::select('project_name')->where('id',$id)->pluck('project_name');
 
 
-        $tasks = Task::join('users', 'tasks.assignedTo', '=', 'users.id')
-            ->join('projects', 'tasks.projectID', '=', 'projects.id')
-            ->where('tasks.projectID', $id)
-            ->select('tasks.*', 'users.username as assignedTo', 'users.id as userID', 'projects.projectname as projectID')
+        $tasks = Task::join('users', 'tasks.user_id', '=', 'users.id')
+            ->join('projects', 'tasks.project_id', '=', 'projects.id')
+            ->where('tasks.project_id', $id)
+            ->select('tasks.*', 'users.user_name as user_name', 'users.id as user_id', 'projects.project_name as project_id')
             ->get();
         Log::info('tasks '.json_encode($tasks));
 

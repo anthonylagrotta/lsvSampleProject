@@ -10,11 +10,11 @@ class Task extends Model
 
     public function user()
     {
-        return $this->hasOne('App\User', 'id', 'assignedTo');
+        return $this->hasOne('App\User', 'id', 'user_id');
     }
 
     public function project()
     {
-        return $this->belongsTo('App\Project', 'id', 'projectID');
+        return $this->belongsTo('App\Project', 'id', 'project_id');
     }
 }

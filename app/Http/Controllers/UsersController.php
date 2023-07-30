@@ -30,18 +30,18 @@ class UsersController extends Controller
     }
 
     public function getProjects(Request $request_data, $id) {
-        $projectIDs = Task::select('projectID')->where('assignedTo', $id)->distinct()->pluck('projectID');
+        $projectIDs = Task::select('project_id')->where('user_id', $id)->distinct()->pluck('project_id');
 
-        $user = User::select('username')->where('id',$id)->pluck('username');
+        $user = User::select('user_name')->where('id',$id)->pluck('user_name');
         
         $projectDetails = [];
         foreach($projectIDs as $projectID){
             $projectDetail = [];
             $hours = [];
 
-            $userInfo = Task::where('projectID', $projectID)
-            ->join('users', 'tasks.assignedTo', '=', 'users.id')
-            ->select('assignedTo','users.username')
+            $userInfo = Task::where('project_id', $projectID)
+            ->join('users', 'tasks.user_id', '=', 'users.id')
+            ->select('user_id','users.user_name')
             ->distinct()
             ->get();
             $userArray = [];
@@ -50,18 +50,18 @@ class UsersController extends Controller
             Log::info('members '.json_encode($members));
             
             foreach($members as $thing){
-                $userArray [] = $thing['username'];
-                $userIDArray [] = $thing['assignedTo'];
+                $userArray [] = $thing['user_name'];
+                $userIDArray [] = $thing['user_id'];
             }
 
-            $hours [] = Task::where('projectID', $projectID)
-            ->select('estimatedHours')
-            ->pluck('estimatedHours')->sum();
+            $hours [] = Task::where('project_id', $projectID)
+            ->select('estimated_hours')
+            ->pluck('estimated_hours')->sum();
 
             $projectDetail['project'] = Project::find($projectID);
             $projectDetail['members'] = $userArray;
-            $projectDetail['userID'] = $userIDArray;
-            $projectDetail['estimatedHours'] = $hours;
+            $projectDetail['user_id'] = $userIDArray;
+            $projectDetail['estimated_hours'] = $hours;
             if(sizeof($projectDetails)<1){
                 $projectDetail['user'] = $user;
             }

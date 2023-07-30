@@ -10,6 +10,6 @@ class Project extends Model
 
     public function tasks()
     {
-        return $this->hasMany('App\Task', 'id', 'projectID');
+        return $this->hasMany('App\Task', 'id', 'project_id');
     }
 }

@@ -11,7 +11,7 @@
     <th mat-header-cell *matHeaderCellDef> Members </th>
     <td mat-cell *matCellDef="let element" class="not-clickable">
       <!-- Wrap each member in an anchor tag or button -->
-      <a *ngFor="let member of element.members"  (click)="goToUserProjects(element.userID[element.members.indexOf(member)])">
+      <a *ngFor="let member of element.members"  (click)="goToUserProjects(element.user_id[element.members.indexOf(member)])">
         {{member}}
       </a>
     </td>
@@ -20,7 +20,7 @@
   <!-- Estimated Hours -->
   <ng-container matColumnDef="estimatedHours">
     <th mat-header-cell *matHeaderCellDef> Estimated Hours </th>
-    <td mat-cell *matCellDef="let element" class="not-clickable">{{element.estimatedHours}}</td>
+    <td mat-cell *matCellDef="let element" class="not-clickable">{{element.estimated_hours}}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns" class="not-clickable"></tr>

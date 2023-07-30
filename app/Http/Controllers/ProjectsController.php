@@ -28,9 +28,9 @@ class ProjectsController extends Controller
             $hours = [];
 
 
-            $userInfo = Task::where('projectID', $id)
-            ->join('users', 'tasks.assignedTo', '=', 'users.id')
-            ->select('assignedTo','users.username')
+            $userInfo = Task::where('project_id', $id)
+            ->join('users', 'tasks.user_id', '=', 'users.id')
+            ->select('user_id','users.user_name')
             ->distinct()
             ->get();
             $userArray = [];
@@ -38,27 +38,22 @@ class ProjectsController extends Controller
             $members = json_decode($userInfo, true);
             
             foreach($members as $thing){
-                $userArray [] = $thing['username'];
-                $userIDArray [] = $thing['assignedTo'];
+                $userArray [] = $thing['user_name'];
+                $userIDArray [] = $thing['user_id'];
             }
 
-            $hours [] = Task::where('projectID', $id)
-            ->select('estimatedHours')
-            ->pluck('estimatedHours')->sum();
+            $hours [] = Task::where('project_id', $id)
+            ->select('estimated_hours')
+            ->pluck('estimated_hours')->sum();
 
             $projectDetail['id'] = $id;
-            $projectDetail['project'] = $item['projectname'];
+            $projectDetail['project'] = $item['project_name'];
             $projectDetail['members'] = $userArray;
-            $projectDetail['userID'] = $userIDArray;
-            $projectDetail['estimatedHours'] = $hours;
+            $projectDetail['user_id'] = $userIDArray;
+            $projectDetail['estimated_hours'] = $hours;
 
             $projectDetails[] = $projectDetail;
 
-            $test = Task::where('projectID', $id)
-            ->join('users', 'tasks.assignedTo', '=', 'users.id')
-            ->select('assignedTo','users.username')
-            ->distinct()
-            ->get();
         
         }
 

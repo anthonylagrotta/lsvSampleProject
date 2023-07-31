@@ -19,47 +19,47 @@ class ProjectsController extends Controller
         // get all of the projects
 
         $projects = DB::table('projects')->get();
-        $dataArray = json_decode($projects, true);
-        $projectDetails = [];
+        $data_array = json_decode($projects, true);
+        $project_details = [];
 
-        foreach ($dataArray as $item) {
+        foreach ($data_array as $item) {
             $id = $item['id'];
-            $projectDetail = [];
+            $project_detail = [];
             $hours = [];
 
 
-            $userInfo = Task::where('project_id', $id)
+            $user_info = Task::where('project_id', $id)
             ->join('users', 'tasks.user_id', '=', 'users.id')
             ->select('user_id','users.user_name')
             ->distinct()
             ->get();
-            $userArray = [];
-            $userIDArray = [];
-            $members = json_decode($userInfo, true);
+            $user_array = [];
+            $user_id_array = [];
+            $members = json_decode($user_info, true);
             
             foreach($members as $thing){
-                $userArray [] = $thing['user_name'];
-                $userIDArray [] = $thing['user_id'];
+                $user_array [] = $thing['user_name'];
+                $user_id_array [] = $thing['user_id'];
             }
 
             $hours [] = Task::where('project_id', $id)
             ->select('estimated_hours')
             ->pluck('estimated_hours')->sum();
 
-            $projectDetail['id'] = $id;
-            $projectDetail['project'] = $item['project_name'];
-            $projectDetail['members'] = $userArray;
-            $projectDetail['user_id'] = $userIDArray;
-            $projectDetail['estimated_hours'] = $hours;
+            $project_detail['id'] = $id;
+            $project_detail['project'] = $item['project_name'];
+            $project_detail['members'] = $user_array;
+            $project_detail['user_id'] = $user_id_array;
+            $project_detail['estimated_hours'] = $hours;
 
-            $projectDetails[] = $projectDetail;
+            $project_details[] = $project_detail;
 
         
         }
 
-        Log::info('projectDetails '.json_encode($projectDetails));
+        Log::info('projectDetails '.json_encode($project_details));
 
-        return response()->json($projectDetails, 200);
+        return response()->json($project_details, 200);
         
     }
 
